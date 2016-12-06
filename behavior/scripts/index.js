@@ -53,7 +53,8 @@ exports.handle = (client) => {
       // configure responses to be automatically sent as predicted by the machine learning model
     },
     streams: {
-      main: greeting,
+      main: 'hi',
+	  hi: greeting,
       end: [untrained],
     },
   })
