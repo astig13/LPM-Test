@@ -22,7 +22,7 @@ exports.handle = (client) => {
     }
   })
 
-  const greeting = client.createStep({
+  const handleGreeting = client.createStep({
   satisfied() {
   return false
   },
@@ -53,8 +53,9 @@ exports.handle = (client) => {
       // configure responses to be automatically sent as predicted by the machine learning model
     },
     streams: {
-      main: 'hi',
-	  hi: greeting,
+	  greeting: handleGreeting,
+      main: 'onboarding',
+	  onboarding: [sayHello],
       end: [untrained],
     },
   })
