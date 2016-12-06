@@ -22,6 +22,18 @@ exports.handle = (client) => {
     }
   })
 
+  const greeting = client.createStep({
+  satisfied() {
+  return false
+  },
+  
+  prompt()
+  {
+  client.addresponse('greeting')
+  client.done()
+  }
+  })
+  
   const untrained = client.createStep({
     satisfied() {
       return false
@@ -41,8 +53,7 @@ exports.handle = (client) => {
       // configure responses to be automatically sent as predicted by the machine learning model
     },
     streams: {
-      main: 'onboarding',
-      onboarding: [sayHello],
+      main: greeting,
       end: [untrained],
     },
   })
