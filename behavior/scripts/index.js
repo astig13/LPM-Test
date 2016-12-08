@@ -55,7 +55,22 @@ exports.handle = (client) => {
         }
     })
 
+    const handleEvent = client.createStep({
+        satisfied() {
+            return false
+        },
+        prompt() {
+            client.addTextResponse("eveeent")
+            client.done()
+        }
+    })
+
     client.runFlow({
+        eventHandlers: {
+            // '*' Acts as a catch-all and will map all events not included in this
+            // object to the assigned function
+            '*': handleEvent,
+        },
         classifications: {
             // map inbound message classifications to names of streams
             greeting: 'greeting',
