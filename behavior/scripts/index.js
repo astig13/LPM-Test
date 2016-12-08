@@ -55,15 +55,10 @@ exports.handle = (client) => {
         }
     })
 
-    const handleEvent = client.createStep({
-        satisfied() {
-            return false
-        },
-        prompt() {
-            client.addTextResponse("eveeent")
-            client.done()
-        }
-    })
+    const handleEvent = function (eventType, payload) {
+        client.addTextResponse('Received event of type: ' + eventType)
+        client.done()
+    }
 
     client.runFlow({
         eventHandlers: {
