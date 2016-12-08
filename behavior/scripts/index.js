@@ -67,7 +67,6 @@ exports.handle = (client) => {
         streams: {
             goodbye: handleGoodbye,
             greeting: handleGreeting,
-            main: 'onboarding',
             onboarding: [sayHello],
             end: [untrained],
         },
