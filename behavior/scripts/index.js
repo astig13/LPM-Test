@@ -1,63 +1,75 @@
 'use strict'
 
 exports.handle = (client) => {
-  // Create steps
-  const sayHello = client.createStep({
-    satisfied() {
-      return Boolean(client.getConversationState().helloSent)
-    },
+    // Create steps
+    const sayHello = client.createStep({
+        satisfied() {
+            return Boolean(client.getConversationState().helloSent)
+        },
 
-    prompt() {
-      client.addResponse('welcome')
-      client.addResponse('provide/documentation', {
-        documentation_link: 'http://docs.init.ai',
-      })
-      client.addResponse('provide/instructions')
+        prompt() {
+            client.addResponse('welcome')
+            client.addResponse('provide/documentation', {
+                documentation_link: 'http://docs.init.ai',
+            })
+            client.addResponse('provide/instructions')
 
-      client.updateConversationState({
-        helloSent: true
-      })
+            client.updateConversationState({
+                helloSent: true
+            })
 
-      client.done()
-    }
-  })
+            client.done()
+        }
+    })
 
-  const handleGreeting = client.createStep({
-  satisfied() {
-  return false
-  },
-  
-  prompt()
-  {
-  client.addResponse('greeting')
-  client.done()
-  }
-  })
-  
-  const untrained = client.createStep({
-    satisfied() {
-      return false
-    },
+    const handleGreeting = client.createStep({
+        satisfied() {
+            return false
+        },
 
-    prompt() {
-      client.addResponse('apology/untrained')
-      client.done()
-    }
-  })
+        prompt() {
+            client.addResponse('greeting')
+            client.done()
+        }
+    })
 
-  client.runFlow({
-    classifications: {
-      // map inbound message classifications to names of streams
-	  greeting: 'greeting'
-    },
-    autoResponses: {
-      // configure responses to be automatically sent as predicted by the machine learning model
-    },
-    streams: {
-	  greeting: handleGreeting,
-      main: 'onboarding',
-	  onboarding: [sayHello],
-      end: [untrained],
-    },
-  })
+    const handleGoodbye = client.createStep({
+        satisfied() {
+            return false
+        },
+
+        prompt() {
+            client.addResponse('goodbye')
+            client.done()
+        }
+    })
+
+    const untrained = client.createStep({
+        satisfied() {
+            return false
+        },
+
+        prompt() {
+            client.addResponse('apology/untrained')
+            client.done()
+        }
+    })
+
+    client.runFlow({
+        classifications: {
+            // map inbound message classifications to names of streams
+            greeting: 'greeting',
+            goodbye: 'goodbye'
+        },
+        autoResponses: {
+            // configure responses to be automatically sent as predicted by the machine learning model
+        },
+        streams: {
+            goodbye: handleGoodbye,
+            greeting: handleGreeting,
+            main: 'onboarding',
+            onboarding: [sayHello],
+            end: [untrained],
+        },
+    })
 }
