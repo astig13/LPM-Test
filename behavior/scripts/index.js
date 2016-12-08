@@ -9,6 +9,7 @@ exports.handle = (client) => {
 
         prompt() {
             client.addResponse('greeting')
+            client.addTextResponse('I am here to help you with your Loyalty Program')
             client.done()
             client.updateConversationState({
                 helloSent: true
@@ -59,6 +60,7 @@ exports.handle = (client) => {
         },
         streams: {
             goodbye: handleGoodbye,
+            main: 'greeting',
             greeting: handleGreeting,
             end: [untrained],
         },
