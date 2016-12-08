@@ -2,34 +2,17 @@
 
 exports.handle = (client) => {
     // Create steps
-    const sayHello = client.createStep({
+    const handleGreeting = client.createStep({
         satisfied() {
             return Boolean(client.getConversationState().helloSent)
         },
 
         prompt() {
-            client.addResponse('welcome')
-            client.addResponse('provide/documentation', {
-                documentation_link: 'http://docs.init.ai',
-            })
-            client.addResponse('provide/instructions')
-
+            client.addResponse('greeting')
+            client.done()
             client.updateConversationState({
                 helloSent: true
             })
-
-            client.done()
-        }
-    })
-
-    const handleGreeting = client.createStep({
-        satisfied() {
-            return false
-        },
-
-        prompt() {
-            client.addResponse('greeting')
-            client.done()
         }
     })
 
@@ -77,7 +60,6 @@ exports.handle = (client) => {
         streams: {
             goodbye: handleGoodbye,
             greeting: handleGreeting,
-            onboarding: [sayHello],
             end: [untrained],
         },
     })
